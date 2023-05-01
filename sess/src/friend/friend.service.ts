@@ -1,0 +1,210 @@
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Conversation } from 'src/conversation/conversation.entity';
+import { userData } from 'src/utils/interfaces';
+import { User } from 'src/user/user.entity';
+import { ConfirmationStatusEnum, ConversationTypeEnum, RelationshipType } from 'src/utils/types';
+import { getRepository } from 'typeorm';
+import { Friend } from './friend.entity';
+
+@Injectable()
+export class FriendService {
+    constructor(private eventEmitter: EventEmitter2){}
+    
+    async inviteUser(userid: string, friendid:string): Promise<HttpException> {
+        const user = await User.findOne({userid});
+        if(!user)
+            throw new HttpException("User doesn't exist",HttpStatus.NOT_FOUND);
+
+        const friend = await User.findOne({userid:friendid});
+        if(!friend)
+            throw new HttpException("Friend doesn't exist",HttpStatus.NOT_FOUND);
+        if(!friend.confirmed)
+            throw new HttpException("Friend doesn't confirmed email yet",HttpStatus.NOT_ACCEPTABLE);
+        const relation = new Friend();
+        relation.confirmatonStatus = ConfirmationStatusEnum.REMAINING;
+        relation.user = user;
+        relation.friend = friend;
+        relation.save();
+        console.log("[CHAT][INFO] "+new Date().toUTCString()+" - User: "+ user.name+"["+user.email+"] invited User: "+friend.name+"["+friend.email+"]"+" to friends list!");
+        this.eventEmitter.emit('inviting.create',friend);
+        throw new HttpException("Invitation sended",HttpStatus.CREATED);
+    }
+
+    async confirmInvitation(userid: string, friendid:string): Promise<HttpException> {
+        console.log(userid,friendid)
+        const user = await User.findOne({userid});
+        if(!user)
+            throw new HttpException("User doesn't exist",HttpStatus.NOT_FOUND);
+
+        const friend = await User.findOne({userid:friendid});
+        if(!friend)
+            throw new HttpException("Friend doesn't exist",HttpStatus.NOT_FOUND);
+        const relation = await Friend.findOne({user:friend, friend:user});
+        if(!relation)
+            throw new HttpException("Invitation doesn't exist",HttpStatus.NOT_FOUND);
+
+        relation.confirmatonStatus = ConfirmationStatusEnum.CONFIRMED;
+        const result = await relation.save();
+        if(!result) throw new HttpException("Invitation doesn't exist",HttpStatus.NOT_FOUND);
+        
+        const conversation = new Conversation();
+        conversation.creator = friend;
+        conversation.createdAt = new Date();
+        conversation.conversationType = ConversationTypeEnum.REGULAR;
+        conversation.name = "Regular Conversation";
+
+        conversation.participants = [user, friend];
+        conversation.save();
+
+        console.log("[CHAT][INFO] "+new Date().toUTCString()+" - User: "+ user.name+"["+user.email+"] confirmed relation with User: "+friend.name+"["+friend.email+"]"+"!");
+        this.eventEmitter.emit('friend.update',[user,friend]);
+        throw new HttpException("Invitation confirmed",HttpStatus.OK);
+    }
+
+    async rejectInvitation(userid: string, friendid:string): Promise<HttpException> {
+        const user = await User.findOne({userid});
+        if(!user)
+            throw new HttpException("User doesn't exist",HttpStatus.NOT_FOUND);
+
+        const friend = await User.findOne({userid:friendid});
+        if(!friend)
+            throw new HttpException("Friend doesn't exist",HttpStatus.NOT_FOUND);
+        const relation = await Friend.findOne({user:friend, friend:user});
+        if(!relation)
+            throw new HttpException("Invitation doesn't exist",HttpStatus.NOT_FOUND);
+
+        relation.confirmatonStatus = ConfirmationStatusEnum.REJECTED;
+        const result = await relation.save();
+        if(!result) throw new HttpException("Invitation doesn't exist",HttpStatus.NOT_FOUND);
+
+        console.log("[CHAT][INFO] "+new Date().toUTCString()+" - User: "+ user.name+"["+user.email+"] rejected relation with User: "+friend.name+"["+friend.email+"]"+"!");
+        this.eventEmitter.emit('friend.update',{user,friend});
+        throw new HttpException("Invitation rejected",HttpStatus.OK);
+    }
+
+    async getInvitations(userid: string): Promise<HttpException|userData[]> {
+        const user = await User.findOne({userid});
+        if(!user)
+            throw new HttpException("User doesn't exist",HttpStatus.NOT_FOUND);
+
+        const invitations = await getRepository(Friend)
+            .createQueryBuilder("friend")
+            .leftJoinAndSelect("friend.user","user")
+            .where("friend.confirmatonStatus=:status AND friend.friendUserid=:id",{status:ConfirmationStatusEnum.REMAINING,id:userid})
+            .getMany()
+
+        var invitatingUsers:userData[] = [];
+        invitations.map(relation=>{
+            const {userid,name,firstname,lastname,sex,email,photo} = relation.user;
+            invitatingUsers.push({userid,name,firstname,lastname,sex,email,photo});
+        })
+       
+        return invitatingUsers;
+    }
+
+    async getRejectedUsers(userid: string): Promise<HttpException|userData[]> {
+        const user = await User.findOne({userid});
+        if(!user)
+            throw new HttpException("User doesn't exist",HttpStatus.NOT_FOUND);
+
+            const invitations = await getRepository(User)
+            .createQueryBuilder("user")
+            .select("user.userid,user.firstname,user.lastname,user.name,user.sex,user.email")
+            .leftJoin("user.users","friend")
+            .where("friend.confirmatonStatus=:status AND friend.friendUserid=:id",{status:2,id:user.userid})
+            .orderBy({
+              "user.name": "ASC",
+            })
+            .getRawMany();
+        return invitations;
+    }
+
+    async isFriend(userid: string, friendid: string): Promise<RelationshipType | HttpException> {
+        const user = await getRepository(Friend)
+        .createQueryBuilder("friend")
+        .select("friend.confirmatonStatus,user.userid,user.name,user.sex,user.email")
+        .leftJoin("friend.friend","user")
+        .where("friend.userUserid=:id AND friend.friendUserid=:fid",{id:userid,fid:friendid})
+        .orWhere("friend.friendUserid=:id AND friend.userUserid=:fid",{id:userid,fid:friendid})
+        .getRawOne();
+        
+        if(!user) return RelationshipType.FOREIGN;
+        else return user.confirmatonStatus;
+    }
+
+    async getFriendList(userid: string): Promise<userData[]> {
+        
+        const user = await User.findOne({userid});
+        if(!user)
+            throw new HttpException("User doesn't exist",HttpStatus.NOT_FOUND);
+        
+        // const flist = await getRepository(Friend)
+        //     .createQueryBuilder("friend")
+        //     .select("user.userid,user.firstname,user.lastname,user.name,user.sex,user.email,user.photo")
+        //     .leftJoin("friend.friend","user")
+        //     .where("friend.confirmatonStatus=:status AND friend.userUserid=:id",{status:ConfirmationStatusEnum.CONFIRMED,id:user.userid})
+        //     .orWhere("friend.confirmatonStatus=:status AND friend.friendUserid=:id",{status:ConfirmationStatusEnum.CONFIRMED,id:user.userid})
+        //     .orderBy({
+        //       "friend.friendUserid": "ASC",
+        //     })
+        //     .getRawMany();
+            const flist = await Friend.query(
+                `select user.userid,user.firstname,user.lastname,user.name,user.sex,user.email,user.photo from user,friend `+
+                `where (user.userid = friend.userUserid or user.userid = friend.friendUserid) and friend.confirmatonStatus=2 `+
+                `and (friend.userUserid="${userid}" or friend.friendUserid="${userid}") except `+
+                `select user.userid,user.firstname,user.lastname,user.name,user.sex,user.email,user.photo from user where user.userid="${userid}"`);
+        return flist;
+    }
+
+    async getCommonFriendList(userid: string, friendid:string): Promise<userData[]> {
+        const user = await User.findOne({userid});
+        if(!user)
+            throw new HttpException("User doesn't exist",HttpStatus.NOT_FOUND);
+        
+        const list = await User.query(
+        `select DISTINCT * from 
+                (select user.userid,user.firstname,user.lastname,user.name,user.sex,user.email,user.photo 
+                    from user,friend where 
+                    (user.userid=friend.userUserid or user.userid=friend.friendUserid)
+                    and friend.confirmatonStatus=2 
+                    and (friend.userUserid = "${userid}" 
+                        or friend.friendUserid = "${userid}")
+                except select user.userid,user.firstname,user.lastname,user.name,user.sex,user.email,user.photo  
+                from user,friend where user.userid="${userid}"
+                ) as q1,
+                (select user.userid,user.firstname,user.lastname,user.name,user.sex,user.email,user.photo
+                    from user,friend WHERE
+                    (user.userid=friend.userUserid or user.userid=friend.friendUserid)
+                    and friend.confirmatonStatus=2 
+                    and (friend.userUserid = "${friendid}"
+                        or friend.friendUserid = "${friendid}")
+                except select user.userid,user.firstname,user.lastname,user.name,user.sex,user.email,user.photo 
+                from user,friend where user.userid="${friendid}"
+                ) as q2
+        where q1.userid = q2.userid;`);
+        //"where userquery.userid = friendquery.userid");
+        console.log(list)
+        return list;
+    }
+
+    async deleteFriend(userid:string,friendid:string):Promise<HttpException> {
+        const user = await User.findOne({userid});
+        if(!user)
+            throw new HttpException("User Account doesn't exist",HttpStatus.NOT_FOUND);
+        const friend = await User.findOne({userid:friendid});
+        if(!friend)
+            throw new HttpException("Friend Account doesn't exist",HttpStatus.NOT_FOUND);
+        const relation1 = await Friend.findOne({user:user,friend:friend});
+        if(!relation1){
+            const relation2 = await Friend.findOne({user:friend,friend:user});
+            if(!relation2) throw new HttpException("Relation doesn't exist",HttpStatus.NOT_FOUND);
+            Friend.delete(relation2);
+        }
+        else Friend.delete(relation1);
+
+        console.log("[CHAT][INFO] "+new Date().toUTCString()+" - User: "+ user.name+"["+user.email+"] deleted User: "+friend.name+"["+friend.email+"]"+" from friends list!");
+        this.eventEmitter.emit('friend.update',[user,friend]);
+        throw new HttpException("User deleted from list",HttpStatus.OK);
+    }
+}
