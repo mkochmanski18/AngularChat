@@ -1,0 +1,99 @@
+.row{
+    height: 100%;
+    margin:0;
+    padding: 0;
+    min-width: 400px;
+}
+.card{
+    width: 100%;
+    height: 90vh;
+    min-height: 400px;
+    display: flex;
+    padding: 0;
+}
+.input-group{
+    flex-wrap: nowrap;
+}
+.list-group{
+    height: 100%;
+    overflow-y: scroll;
+    border:none;
+}
+.conversation-container{
+    flex-grow: 1;
+    padding: 10px;
+}
+.user-item{
+    display:flex;
+    justify-content:flex-start;
+    width: 100%;
+}
+.user-item>img,.user-item>p{
+    margin: auto 10px;
+}
+.user-item span{
+    display: block;
+}
+.user-item>img,.photo-frame{
+    width:50px;
+    height: 50px;
+    border: solid 1px black;
+    border-radius: 0.5em;
+}
+.photo-frame{
+    margin-left: 10px;
+}
+.photo-frame svg{
+    width:50px;
+    height: 50px;
+}
+.back-button{
+    color:#818b94;
+}
+.back-button:hover{
+    opacity: 0.5;
+}
+.go-bottom{
+    position: absolute;
+    top: 5px;
+    right: 40px;
+    width: 40px;
+    height: 40px;
+    padding: 5px;
+    color: rgba(128, 147, 148, 0.466);
+    border: none;
+}
+.go-bottom:hover{
+    border: none;
+    transform: scale(110%);
+}
+.go-bottom:hover::after{
+    content: "Go to new messages";
+    position: absolute;
+    top: 30px;
+    right: 20px;
+    width: 100px;
+    padding: 5px;
+    background-color: aliceblue;
+    color:rgba(0, 0, 0, 0.521);
+    font-size: smaller;
+}
+.go-bottom:active{
+    color:firebrick
+}
+.exit-btn{
+    position: absolute;
+    top: 5px;
+    right: 0px;
+    width: 40px;
+    height: 40px;
+    padding: 5px;
+    background-color: transparent;
+    color:firebrick;
+    border: none;
+}
+.exit-btn:hover{
+    transform: rotate(90deg);
+    translate: 2px 2px;
+    transition: 0.3s ease;
+}

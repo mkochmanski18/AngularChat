@@ -1,0 +1,19 @@
+<div class="row">
+    <app-new-group></app-new-group>
+    <hr>
+    <div class="row groups-row">
+        <h5>Groups</h5>
+        <ul class="list-group" *ngIf="groupList?.length>0;else noGroup">
+            <app-group-item
+            *ngFor="let group of groupList"
+            [group]="group"
+            [type]="2"
+            ></app-group-item>
+        </ul>
+        <ng-template #noGroup class="alert">
+            <span class="g-alert">- No Groups -</span>
+        </ng-template>
+    </div>
+    <div class="alert alert-danger" *ngIf="error">{{error}}</div>
+
+</div>

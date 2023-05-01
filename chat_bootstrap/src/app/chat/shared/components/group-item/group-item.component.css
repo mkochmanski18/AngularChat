@@ -1,0 +1,121 @@
+@media(max-width:767px){
+    .btns{
+        height: 50px;
+        width: 50px;
+    }
+}
+
+.list-group-item{
+    margin-left: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.list-group-item:hover{
+    background-color: rgb(242, 246, 250);
+    cursor: pointer;
+}
+.group-item{
+    display:flex;
+    justify-content:flex-start;
+    width: 100%;
+}
+.group-item>p{
+    margin: auto 10px;
+}
+.group-item span{
+    display: block;
+}
+.group-item span:nth-child(2){
+    font-size: smaller;
+}
+.photo-frame{
+    width:50px;
+    height: 50px;
+    border: solid 1px black;
+    border-radius: 0.5em;
+    margin-left: 10px;
+}
+.photo-frame svg{
+    width:40px;
+    height: 40px;
+    translate: 10% 20%;
+}
+
+.buttons{
+    margin: auto 20px;
+}
+.profile-animate{
+    opacity:0;
+    right:30px;
+    transition: 0.3s ease-in-out;
+}
+li:hover .profile-animate{
+    opacity: 1;
+    right: 0px;
+}
+.btns{
+    color:#fff;
+    padding: 0;
+    margin: 0 2px;
+}
+.btns svg{
+    translate: 0.2px -1px;
+}
+.delete-btn{
+    background-color: #dc3545;
+    border: solid 1px #dc3545;
+    padding: 7px 8px;
+}
+.delete-btn:hover{
+    background-color: #bb2d3b;
+    border-color: #b02a37;
+}
+.profile-btn{
+    background-color: #6c757d;
+    border: solid 1px #6c757d;
+    padding: 6px 7px;
+}
+.profile-btn:hover{
+    background-color: #5c636a;;
+    border-color: #565e64;
+}
+.alert{
+    margin-left: 10px;
+    animation: hide 1s linear 5s 1 forwards;
+}
+li:hover>.popover{
+    display: block;
+}
+.popover{
+    display: none;
+    position: absolute;
+    width: max-content;
+    height: auto;
+}
+.popover-left{
+    left:-280px;
+}
+.popover-bottom{
+    top: 60px;
+}
+.popover::before{
+    content:'';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top: solid 1px #565e64;
+    border-left: solid 1px #565e64;
+}
+.popover-left::before{
+    right: -15px;
+    top:20px;
+    rotate: 135deg;
+}
+.popover-bottom::before{
+    top:-10px;
+    left:40px;
+    rotate: 45deg;
+}

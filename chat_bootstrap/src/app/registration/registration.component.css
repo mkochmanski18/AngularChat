@@ -1,0 +1,61 @@
+.container{
+    width: 100%;
+    height: 100%;
+}
+div{
+    width:100%;
+}
+.card-header{
+    text-align: center;
+    padding: 20px;
+    font-size: larger;
+}
+.form-block{
+    max-width: 400px;
+    margin: 100px auto;
+}
+.form-group-item{
+    display: inline-flex;
+}
+form{
+    max-width: 400px;
+    display: flex;
+    padding: 30px 30px;
+    flex-direction: column;
+}
+form>*{
+    margin: 5px;
+}
+form .ng-invalid.ng-touched{
+    border: solid 1px firebrick;
+}
+input[type='text'],input[type='email'],input[type='password']{
+    width: 100%;
+    padding-left: 40px; 
+}
+.radio{
+    display: inline-flex;
+}
+label{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    box-sizing: border-box;
+    position: absolute;
+}
+label svg{
+    translate:70% 70%;
+}
+button{
+    width: 100%;
+}
+a.link{
+    color: rgb(61, 120, 231);
+    text-decoration: none;
+    cursor: pointer;
+}
+span{
+    width: 100%;
+    padding-top: 30px;
+    text-align: center;
+}

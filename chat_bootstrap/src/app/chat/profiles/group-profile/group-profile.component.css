@@ -1,0 +1,65 @@
+.card-header{
+    padding: 10px 30px;
+    font-size: larger;
+}
+.exit-btn{
+    width: 40px;
+    background-color: transparent;
+    color:firebrick;
+    border: none;
+    position: absolute;
+    right: 10px;
+    scale: 130%;
+}
+.exit-btn:hover{
+    transform: rotate(90deg);
+    translate: 3px 3px;
+    transition: 0.3s ease;
+}
+.profile{
+    width: 100%;
+    padding: 20px 30px;
+    display: flex;
+}
+.profile>div{
+    width: auto;
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column;
+}
+.groupdata-col h5{
+    color:darkcyan;
+}
+.groupdata-col{
+    margin: 10px;
+    width: auto;
+}
+.groupdata-col p{
+    margin: 0;
+}
+.groupdata-col>div{
+    text-align: center;
+}
+
+.image-col{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+img,
+.photo-frame{
+    margin: 0px auto;
+    width:150px;
+    height:150px;
+    border-radius: 1em;
+    border: solid 1px black;
+    background-color:beige;
+}
+.photo-frame svg{
+    width: 80%;
+    height: 80%;
+    translate: 12% 20%;
+}
+h6{
+    text-align: center;
+}

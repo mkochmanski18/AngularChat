@@ -1,0 +1,22 @@
+<div class="container-fluid">
+    <div class="row">
+        <div 
+        class="col-md-5 col-lg-4 col-xl-4 control-panel"
+        *ngIf="(chatfn===0 && mobile)||!mobile"
+        >
+            <app-chat-control-panel></app-chat-control-panel>
+        </div>
+        <div 
+        class="col-md-5 col-sm-5 col-lg-8 col-xl-8 chat-panel"
+        *ngIf="(chatfn===1 && mobile)||!mobile">
+            <app-chat-panel [mobile]="mobile"></app-chat-panel>
+        </div>
+    </div>
+    
+</div>
+<div class="configurationRow" *ngIf="configuration">
+    <app-settings></app-settings>
+</div>
+<div class="configurationRow" *ngIf="profile">
+    <app-profiles></app-profiles>
+</div>

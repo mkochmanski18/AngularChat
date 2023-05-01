@@ -1,0 +1,52 @@
+<div class="card-header">
+    Group Profile
+    <button class="exit-btn" (click)="onExit()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
+            viewBox="0 0 16 16">
+            <path
+                d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+        </svg>
+    </button>
+</div>
+<div class="row profile">
+    <div class="col-md-3">
+        <div class="image-col">
+            <img *ngIf="profilePhotoSrc; else defaultPhoto" [src]="profilePhotoSrc" alt="" height="50px" width="50px"
+                style="border: solid 1px black;">
+            <ng-template #defaultPhoto>
+                <div class="photo-frame">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-person-fill" viewBox="0 0 16 16">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                    </svg>
+                </div>
+            </ng-template>
+        </div>
+        <div class="groupdata-col" *ngIf="groupData">
+            <div class="row">
+                <h5>{{groupData.name}}</h5>
+                <p>
+                    <span>Participants number: {{groupData.participants.length+1}}</span>
+                </p>
+            </div>
+            
+        </div>
+    </div>
+    <div class="common col-md-6">
+        <div class="alert alert-danger" *ngIf="error">{{error}}</div>
+        <h6>Participants</h6>
+        <hr>
+        <ul class="list-group" *ngIf="groupData?.participants;else noParticipants">
+            <app-user-item 
+                *ngFor="let participant of groupData.participants"
+                [user]="participant"
+                [type]="1"
+                [usage]="2"
+                >
+            </app-user-item>
+        </ul>
+        <ng-template #noParticipants class="alert">
+            <span class="inv-alert">- No Participants -</span>
+        </ng-template>
+    </div>
+</div>

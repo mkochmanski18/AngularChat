@@ -1,0 +1,77 @@
+.emoji-mart{
+    position: absolute;
+    bottom: 40px;
+}
+.typing-space{
+    display: block;
+    height: max-content;
+    width: 100%;
+    margin-bottom:0px;
+    position: relative;
+}
+.textarea{
+    box-shadow: none;
+    resize: none;
+    border-top:solid 1px #adb5bd;
+}
+.btn{
+    border-top:solid 1px #adb5bd;
+    background-color: #e5e5e6;
+    height: 40px;
+    display: block;
+    margin: auto 0;
+}
+.btn:hover{
+    background-color: #f8f9fa;
+}
+.img-btn{
+    color:black;
+    border-left:solid 1px #adb5bd;
+}
+.send-btn{
+    color:cadetblue;
+    right: 0px;
+    border-left: solid 1px #adb5bd;
+    border-right:solid 1px #adb5bd;
+}
+.emoji-btn{
+    border-right: solid 1px #adb5bd;
+    border-left: solid 1px #adb5bd;
+}
+.emoji-btn:focus{
+    outline: 0;
+}
+.uploadedImage{
+    width:100px;
+    height: 100px;
+}
+.image-container{
+    display: inline-flex;
+    flex-grow: 1;
+    justify-content: flex-end;
+    padding: 0px 20px;
+}
+.closing-btn{
+    display: block;
+    align-items: center;
+    align-content: center;
+    bottom: 0;
+    width:100px;
+    height: 100px;
+    color:firebrick;
+    position: absolute;
+    opacity:0;
+    transition:0.3s ease-in-out;
+    background-color: rgba(240, 248, 255, 0.445);
+}
+.closing-btn svg{
+    margin: auto;
+}
+.closing-btn:hover{
+    opacity:1;
+}
+.alert{
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+}

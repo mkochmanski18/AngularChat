@@ -1,0 +1,45 @@
+<div class="conf-container">
+    <div class="conf card" [ngClass]="mobile?'mobile-conf':'normal-conf'">
+        <div class="card-header">
+            Settings
+            <button 
+            class="exit-btn"
+            (click)="onExit()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+            </button>
+            
+        </div>
+        <div class="card-body">
+            <div class="btn-group btn-menu">
+                <button 
+                    type="button" 
+                    class="btn"
+                    (click)="onChangeFreature(0)"
+                    [ngClass]="feature===0?'active':null"
+                    >Userdata</button>
+                <button 
+                    type="button" 
+                    class="btn"
+                    (click)="onChangeFreature(1)"
+                    [ngClass]="feature===1?'active':null"
+                    >Friends</button>
+                <button 
+                    type="button" 
+                    class="btn"
+                    (click)="onChangeFreature(2)"
+                    [ngClass]="feature===2?'active':null"
+                >Groups</button>
+                
+            </div>
+            <hr>
+            
+            <!-- <router-outlet></router-outlet> -->
+            <app-userdata-form *ngIf="feature===0"></app-userdata-form>
+            <app-friends-manager *ngIf="feature===1"></app-friends-manager>
+            <app-group-manager *ngIf="feature===2"></app-group-manager>
+        </div>
+    </div>
+</div>
+

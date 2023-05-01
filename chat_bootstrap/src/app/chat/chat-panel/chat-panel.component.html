@@ -1,0 +1,67 @@
+<div class="row">
+  <div class="card" *ngIf="!chosenCon">
+    <div class="card-header">
+      <button 
+        class="back-button btn" 
+        *ngIf="mobile"
+        (click)="onGoBack()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+          </svg>
+        </button>
+      Welcome in Charlie's Chat
+    </div>
+    <div class="card-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">On the control panel (on the pc desktop it's the panel on the left), you can choose conversation to display. </li>
+        <li class="list-group-item">Conversations are divided to 2 types: with friends and group chat.</li>
+        <li class="list-group-item">Updating your accout information is available on <b>Settings</b>, where is also possible to invite new friends and creating groups</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card" *ngIf="chosenCon">
+    <div class="card-header">
+      <div class="input-group">
+        <button 
+        class="back-button btn" 
+        *ngIf="mobile"
+        (click)="onGoBack()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+          </svg>
+        </button>
+        <app-user-item *ngIf="chosenCon.type===0" [user]="chosenCon.participants|userOut:user.userid:chosenCon.type"></app-user-item>
+        <app-group-item *ngIf="chosenCon.type===1" [group]="chosenCon" [showPopover]="true"></app-group-item>  
+        <button class="btn go-bottom" (click)="scrollToBottom()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-caret-down-square-fill" viewBox="0 0 16 16">
+            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4 4a.5.5 0 0 0-.374.832l4 4.5a.5.5 0 0 0 .748 0l4-4.5A.5.5 0 0 0 12 6H4z"/>
+          </svg>
+        </button>
+        <button 
+            class="exit-btn"
+            (click)="onExit()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+            </button>
+      </div>
+      
+    </div>
+    <div class="list-group list-group-flush">
+      <div class="conversation-container">
+        <div class="alert alert-danger" *ngIf="error">{{error}}</div>
+        <app-message-block 
+        *ngFor="let message of messages" 
+        [message]="message"></app-message-block>
+        
+        <div *ngIf="messages?.length===0" style="text-align: center;">
+          -- No messages --
+        </div>
+      </div>
+      
+      <span id="mContainer" #messageContainer></span>
+    </div>
+    <app-typing-interface
+      ></app-typing-interface>
+  </div>
+</div>

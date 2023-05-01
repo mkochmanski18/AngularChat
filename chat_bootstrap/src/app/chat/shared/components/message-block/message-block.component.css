@@ -1,0 +1,109 @@
+.row{
+    display: inline-flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    margin-top: 20px;
+}
+.user{
+    flex-direction: row-reverse;
+    padding-left: 60px;
+}
+.friend{
+    padding-right: 60px;
+}
+.row div{
+    width: max-content;
+}
+.content{
+    display: block;
+    position: relative;
+    min-width: 60px;
+    border-top: solid 2px;
+    border-bottom-right-radius: 3em;
+    border-bottom-left-radius: 3em;
+    padding-top: 10px;
+}
+.friend .content{
+    border-left: solid 2px;
+    border-top-right-radius: 3em;
+    border-color: rgb(197, 199, 201);
+    background-color: aliceblue;
+}
+.user .content{
+    border-right: solid 1px;
+    border-top-left-radius: 3em;
+    border-color: rgba(95, 158, 160, 0.76);
+    background-color: rgba(186, 220, 221, 0.466);
+}
+.content-date{
+    font-size: 10px;
+    display: block;
+    position: absolute;
+    width: max-content;
+    top:-23px;
+    padding:5px;
+}
+.user .content-date{
+    right: -10px;
+    text-align: right;
+}
+.friend .content-date{
+    left:0px;
+}
+.content-text{
+    position: relative;
+    display: block;
+    word-break: break-all;
+    height: auto;
+}
+.user .content-text{
+    position: relative;
+    text-align: right;
+    padding-right: 5px;
+}
+.content-image{
+    position: relative;
+    width: auto;
+    margin-top: 10px;
+}
+.content-image img{
+    width: auto;
+    max-width: 300px;
+}
+.user .user-image{
+    display: none;
+}
+.user-item>img,.photo-frame{
+    width:50px;
+    height: 50px;
+    border: solid 1px black;
+    border-radius: 0.5em;
+}
+.photo-frame{
+    margin-left: 10px;
+}
+.photo-frame svg{
+    width:50px;
+    height: 50px;
+}
+.user-image{
+    display:flex;
+    justify-content:flex-start;
+    width: 100%;
+}
+.user-image>img{
+    margin: auto 10px;
+}
+.user-image>img,.photo-frame{
+    width:50px;
+    height: 50px;
+    border: solid 1px black;
+    border-radius: 0.5em;
+}
+.photo-frame{
+    margin-left: 10px;
+}
+.photo-frame svg{
+    width:50px;
+    height: 50px;
+}

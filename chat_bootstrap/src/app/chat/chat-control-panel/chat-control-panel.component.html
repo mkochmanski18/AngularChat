@@ -1,0 +1,80 @@
+<div class="control-panel-container">
+    <div class="row profile">
+        <div (click)="OnSettings()">
+            <div class="image-col">
+                <img *ngIf="userData?.photo; else defaultPhoto"
+                [src]="profilePhotoSrc" 
+                alt="" 
+                height="50px" 
+                width="50px" 
+                style="border: solid 1px black;">
+                <ng-template #defaultPhoto>
+                    <div class="photo-frame">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                        </svg>
+                    </div>
+                </ng-template>
+            </div>
+            <div class="userdata-col" *ngIf="userData; else dataPlaceholder">
+                <h5>{{userData.firstname}} {{userData.lastname}}</h5>
+                <span class="user-name">#{{userData.name}}</span>
+                <span class="user-email"> ({{userData.email}})</span>
+            </div>
+            <ng-template #dataPlaceholder>
+                <div class="userdata-col" aria-hidden="true">
+                    <h5 class="placeholder-glow" style="width: 200px;"></h5>
+                    <p class="card-text placeholder-glow">
+                        <span class="placeholder" style="width: 200px;"></span>
+                        <span class="placeholder" style="width: 200px;"></span>
+                    </p>
+                    
+                </div>
+            </ng-template>
+        </div>
+        <button class="other-panel-button btn" *ngIf="mobile" (click)="onChangePanel()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8Zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5Z"/>
+            </svg>
+        </button>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="btn-group btn-menu">
+            <button type="button" class="btn" [ngClass]="chosenFn===0?'active':null" (click)="onFnChange(0)">Friends</button>
+            <button type="button" class="btn" [ngClass]="chosenFn===1?'active':null" (click)="onFnChange(1)">Groups</button>
+            <button 
+            type="button" 
+            class="btn"
+            (click)="OnSettings()">Settings</button>
+            <button type="button" class="btn btn-logout" (click)="onLogout()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                </svg>
+            </button>
+            <!-- <button class="btn switch" *ngIf="mobile">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                </svg>
+            </button> -->
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <!-- <button class="btn" (click)="onClick()">Pobierz</button> -->
+        <ul class="list-group user-list" *ngIf="chosenFn===0">
+            <app-user-item
+                *ngFor="let user of userList"
+                [user]="user">
+            </app-user-item>
+        </ul>
+        <ul class="list-group" *ngIf="chosenFn===1">
+            <app-group-item
+                *ngFor="let group of groupList"
+                [group]="group">
+            </app-group-item>
+        </ul>
+    </div>
+    
+</div>
